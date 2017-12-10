@@ -4,6 +4,9 @@ from gensim.models import Word2Vec
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 import collections
+import spacy
+from spacy.vocab import Vocab
+from spacy.language import Language
 
 def create_word_embeddings(tokens_list):
 	print "Starting the embedding process...."
@@ -41,6 +44,9 @@ train_dict,test_dict=utils.train_test_split(dictionary,SPLIT_RATIO)
 tok,tokcount=utils.tokenize(train_dict)
 
 word_embeddings,vocab=create_word_embeddings(tok)
-print len(vocab)
+#print len(vocab)
 
-print utils.eval_method(test_dict,vocab,word_embeddings,len(vocab),method='additive')
+#print utils.eval_method(test_dict,vocab,word_embeddings,len(vocab),method='additive')
+nlp=utils.readwe(SPACYWE)
+nlp.vocab.vectors.resize((len(nlp.vocab.vectors),50))
+print utils.eval_method_with_spacy(test_dict,vocab,nlp,100,method='additive')
